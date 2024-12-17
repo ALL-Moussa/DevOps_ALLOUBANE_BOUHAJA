@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-consumer-kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: post-consumer-kafka
+  template:
+    metadata:
+      labels:
+        app: post-consumer-kafka
+    spec:
+      containers:
+      - name: post-consumer-kafka
+        image: 2024_kubernetes_post_consumer  # Replace with your Docker image
+        imagePullPolicy: IfNotPresent
+        command: ["python", "main.py", "--kafka_host=kafka-broker-service:9092"]
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/app/service-account.json"  # Ensure this path matches where the file is located in your container
